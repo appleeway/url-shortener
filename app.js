@@ -9,8 +9,8 @@ const shortId = require('./shorterid')
 // db model
 const ShortUrl = require('./models/shortUrl')
 
-mongoose.connect('mongodb://localhost/urlShortener', {
-  useNewUrlParser: true, useUnifiedTopology: true
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/urlShortener', {
+  useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true
 })
 
 // set view engine
@@ -56,4 +56,6 @@ app.get('/:shortUrl', async (req, res) => {
 })
 
 //listening port
-app.listen(process.env.PORT || 3000)
+app.listen(process.env.PORT || 3000, () => [
+  console.log('App is running')
+])
