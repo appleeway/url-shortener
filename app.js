@@ -1,8 +1,13 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
-const ShortUrl = require('./models/shortUrl')
 const app = express()
+
+// custom function
+const shortId = require('./shorterid')
+
+// db model
+const ShortUrl = require('./models/shortUrl')
 
 mongoose.connect('mongodb://localhost/urlShortener', {
   useNewUrlParser: true, useUnifiedTopology: true
@@ -14,14 +19,23 @@ app.set('view engine', 'handlebars')
 
 app.use(express.urlencoded({ extended: false }))
 
-
 app.get('/', (req, res) => {
   res.render('index')
 })
 
 app.post('/shortUrls', async (req, res) => {
-  await ShortUrl.create({ full: req.body.fullUrl })
-  res.redirect('/success')
+  const short = shortId()
+  //判斷是否與先前產生的 id 重複
+  await ShortUrl.findOne({ short: short }).then(url => {
+    if (url) {
+      const warning_msg = "true"
+      return res.render('index', { warning_msg })
+    } else {
+      ShortUrl.create({ full: req.body.fullUrl, short: short })
+      res.redirect('/success')
+    }
+  })
+
 })
 
 app.get('/success', async (req, res) => {
@@ -29,6 +43,7 @@ app.get('/success', async (req, res) => {
   const newUrl = await ShortUrl.findOne({}).sort({ _id: -1 }).limit(1).lean()
   res.render('success', { shortUrls: shortUrls, newUrl: newUrl })
 })
+
 
 app.get('/:shortUrl', async (req, res) => {
   const shortUrl = await ShortUrl.findOne({ short: req.params.shortUrl })
