@@ -15,14 +15,20 @@ app.set('view engine', 'handlebars')
 app.use(express.urlencoded({ extended: false }))
 
 
-app.get('/', async (req, res) => {
-  const shortUrls = await ShortUrl.find().lean()
-  res.render('index', { shortUrls: shortUrls })
+app.get('/', (req, res) => {
+  res.render('index')
 })
 
 app.post('/shortUrls', async (req, res) => {
   await ShortUrl.create({ full: req.body.fullUrl })
-  res.redirect('/')
+  res.redirect('/success')
+})
+
+app.get('/success', async (req, res) => {
+  const shortUrls = await ShortUrl.find().lean()
+  const newUrl = await ShortUrl.findOne({}).sort({ _id: -1 }).limit(1).lean()
+  console.log(newUrl)
+  res.render('success', { shortUrls: shortUrls, newUrl: newUrl })
 })
 
 app.get('/:shortUrl', async (req, res) => {
