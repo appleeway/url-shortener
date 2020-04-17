@@ -6,8 +6,9 @@
         class="card-img-top" alt="">
       <div class="card-body">
         <p>Success! Please use this link:</p>
-        <a href="{{newUrl.short}}">http://myprojectname/{{newUrl.short}}</a>
-        <button type="button" class="btn btn-success ml-3">COPY</button>
+        {{!-- Target --}}
+        <a id="foo" href="{{newUrl.short}}">http://myprojectname/{{newUrl.short}}</a>
+        <button type="button" class="btn btn-success ml-3" data-clipboard-target="#foo">COPY LINK</button>
         <ul class="list-group list-group-flush">
           {{#each shortUrls}}
           <li class="list-group-item">

@@ -20,6 +20,20 @@
     {{{body}}}
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+
+  <script>
+    var clipboard = new ClipboardJS('.btn');
+
+    clipboard.on('success', function (e) {
+      console.log(e);
+    });
+
+    clipboard.on('error', function (e) {
+      console.log(e);
+    });
+  </script>
+
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>

@@ -27,7 +27,6 @@ app.post('/shortUrls', async (req, res) => {
 app.get('/success', async (req, res) => {
   const shortUrls = await ShortUrl.find().lean()
   const newUrl = await ShortUrl.findOne({}).sort({ _id: -1 }).limit(1).lean()
-  console.log(newUrl)
   res.render('success', { shortUrls: shortUrls, newUrl: newUrl })
 })
 
